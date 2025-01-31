@@ -1,0 +1,8 @@
+changesets:
+  - id: CS-0001
+    repositories:
+      - name: repo-a
+        ref: feature/new-api
+      - name: repo-b
+        ref: feature/new-ui
+    status: pending
