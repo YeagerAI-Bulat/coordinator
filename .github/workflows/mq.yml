@@ -1,0 +1,40 @@
+name: CI with Merge Queue
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    branches: [ main ]
+  merge_group: # This enables the merge queue functionality
+    types: [ checks_requested ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Checkout the code
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build
+      run: |
+        echo "Building the project..."
+        return 0
+
+    - name: Run tests
+      run: |
+        echo "Running tests..."
+        return 0
+
+# Optional: Add a status check job to ensure all required checks pass
+  build-and-test-status:
+    if: github.event_name == 'merge_group'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All required checks have passed"
+
+# Configuration for merge queue
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true

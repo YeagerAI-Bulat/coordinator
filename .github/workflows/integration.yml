@@ -1,0 +1,30 @@
+name: Minimal Integration Test
+on:
+  workflow_dispatch:
+jobs:
+  test-and-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Coordinator repository
+        uses: actions/checkout@v4
+
+      - name: Checkout Repositories
+        run: |
+          git clone https://github.com/YeagerAI-Bulat/frontend
+          git -C frontend checkout feature/demo-login
+          git clone https://github.com/YeagerAI-Bulat/backend
+          git -C backend checkout feature/auth-api
+
+      - name: Run Smoke Tests
+        run: |
+          # Replace with lightweight tests (e.g., API ping, build checks)
+          echo "Running smoke tests..."
+          ./frontend/scripts/build.sh && ./backend/scripts/build.sh
+
+      - name: Merge on Success
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.MERGE_BOT_TOKEN }}  # Token with repo write access
+        run: |
+          gh pr merge 1 --repo YeagerAI-Bulat/frontend --merge
+          gh pr merge 1 --repo YeagerAI-Bulat/backend --merge
