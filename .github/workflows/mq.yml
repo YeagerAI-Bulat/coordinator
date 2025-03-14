@@ -19,12 +19,10 @@ jobs:
     - name: Build
       run: |
         echo "Building the project..."
-        return 0
 
     - name: Run tests
       run: |
         echo "Running tests..."
-        return 0
 
 # Optional: Add a status check job to ensure all required checks pass
   build-and-test-status:
